@@ -34,6 +34,7 @@ import (
 	"gvisor.dev/gvisor/pkg/sentry/platform/systrap/sysmsg"
 	"gvisor.dev/gvisor/pkg/sentry/platform/systrap/usertrap"
 	"gvisor.dev/gvisor/pkg/sentry/usage"
+	gsync "gvisor.dev/gvisor/pkg/sync"
 )
 
 var (
@@ -814,7 +815,7 @@ func (s *subprocess) waitOnState(ctx *sharedContext) {
 					kicked = s.kickSysmsgThread()
 				}
 			}
-			spinloop()
+			gsync.Goyield()
 		} else {
 			// If the context already received a handshake then it knows it's being
 			// worked on.
